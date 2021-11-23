@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final tarjete = tarjeteFromMap(jsonString);
+
 import 'dart:convert';
 
 class Acount {
@@ -8,10 +12,10 @@ class Acount {
     this.planUsuarioTarjeta,
   });
 
-  final bool ok;
-  final int? contador;
-  final Tarjeta? tarjeta;
-  final String? planUsuarioTarjeta;
+  bool ok;
+  int? contador;
+  Tarjeta? tarjeta;
+  String? planUsuarioTarjeta;
 
   Acount copyWith({
     bool? ok,
@@ -31,105 +35,104 @@ class Acount {
   String toJson() => json.encode(toMap());
 
   factory Acount.fromMap(Map<String, dynamic> json) => Acount(
-        ok: json["ok"],
+        ok: json["ok"] ?? false,
         contador: json["contador"],
-        tarjeta: Tarjeta.fromMap(json["tarjeta"]),
+        tarjeta:
+            json["tarjeta"] == null ? null : Tarjeta.fromMap(json["tarjeta"]),
         planUsuarioTarjeta: json["planUsuarioTarjeta"],
       );
 
   Map<String, dynamic> toMap() => {
         "ok": ok,
         "contador": contador,
-        "tarjeta": tarjeta?.toMap(),
+        "tarjeta": tarjeta == null ? null : tarjeta?.toMap(),
         "planUsuarioTarjeta": planUsuarioTarjeta,
       };
 }
 
 class Tarjeta {
   Tarjeta({
-    required this.links,
-    required this.contador,
-    required this.copia,
-    required this.updated,
-    required this.created,
-    required this.id,
-    required this.slug,
-    required this.name,
-    required this.surname,
-    required this.title,
-    required this.org,
-    required this.www,
-    required this.email,
-    required this.avatar,
-    required this.logo,
-    required this.dir,
-    required this.slogan,
-    required this.facebook,
-    required this.app,
-    required this.tel,
-    required this.cel,
-    required this.wa,
-    required this.v,
-    required this.bgcolor,
-    required this.logowidth,
-    required this.themeicons,
-    required this.icono,
-    required this.partner,
-    required this.style,
-    required this.social,
-    required this.urlmaps,
-    required this.bgcolorfoot,
-    required this.slogancolor,
-    required this.namecolor,
-    required this.titlecolor,
-    required this.labelcolor,
-    required this.mbuttoncolor,
+    this.links,
+    this.contador,
+    this.copia,
+    this.updated,
+    this.created,
+    this.id,
+    this.slug,
+    this.name,
+    this.surname,
+    this.title,
+    this.org,
+    this.www,
+    this.email,
+    this.avatar,
+    this.logo,
+    this.dir,
+    this.slogan,
+    this.facebook,
+    this.app,
+    this.tel,
+    this.cel,
+    this.wa,
+    this.v,
+    this.bgcolor,
+    this.logowidth,
+    this.themeicons,
+    this.icono,
+    this.partner,
+    this.style,
+    this.social,
+    this.urlmaps,
+    this.bgcolorfoot,
+    this.slogancolor,
+    this.namecolor,
+    this.titlecolor,
+    this.labelcolor,
+    this.mbuttoncolor,
+    this.urlMaps,
   });
 
-  //personal infor
-  final String name;
-  final String surname;
-  final String id;
-  final String facebook;
-  final String email;
-  final String tel;
-  final String cel;
-  final String avatar;
-
-  final String title;
-  final String logo;
-  final String dir;
-  final String slogan;
-
-  final String app;
-  final String slug;
-  final List<dynamic> links;
-  final int contador;
-  final int copia;
-  final DateTime updated;
-  final DateTime created;
-  final String org;
-  final String www;
-
-  final String wa;
-  final int v;
-  final String bgcolor;
-  final String logowidth;
-  final String themeicons;
-  final String icono;
-  final dynamic partner;
-  final Style style;
-  final List<Social> social;
-  final String urlmaps;
-  final String bgcolorfoot;
-  final String slogancolor;
-  final String namecolor;
-  final String titlecolor;
-  final String labelcolor;
-  final String mbuttoncolor;
+  List<Link>? links;
+  int? contador;
+  int? copia;
+  DateTime? updated;
+  DateTime? created;
+  dynamic partner;
+  Style? style;
+  List<Social>? social;
+  int? v;
+  String? bgcolor;
+  String? logowidth;
+  String? themeicons;
+  String? icono;
+  String? urlmaps;
+  String? urlMaps;
+  String? bgcolorfoot;
+  String? slogancolor;
+  String? namecolor;
+  String? titlecolor;
+  String? labelcolor;
+  String? mbuttoncolor;
+  String? id;
+  String? slug;
+  String? name;
+  String? surname;
+  String? title;
+  String? org;
+  String? www;
+  String? email;
+  String? avatar;
+  String? logo;
+  String? dir;
+  String? slogan;
+  String? facebook;
+  String? app;
+  String? tel;
+  String? cel;
+  String? wa;
 
   Tarjeta copyWith({
-    List<dynamic>? links,
+    List<Link>? links,
     int? contador,
     int? copia,
     DateTime? updated,
@@ -166,6 +169,7 @@ class Tarjeta {
     String? titlecolor,
     String? labelcolor,
     String? mbuttoncolor,
+    String? urlMaps,
   }) =>
       Tarjeta(
         links: links ?? this.links,
@@ -199,6 +203,7 @@ class Tarjeta {
         style: style ?? this.style,
         social: social ?? this.social,
         urlmaps: urlmaps ?? this.urlmaps,
+        urlMaps: urlMaps ?? this.urlMaps,
         bgcolorfoot: bgcolorfoot ?? this.bgcolorfoot,
         slogancolor: slogancolor ?? this.slogancolor,
         namecolor: namecolor ?? this.namecolor,
@@ -212,11 +217,15 @@ class Tarjeta {
   String toJson() => json.encode(toMap());
 
   factory Tarjeta.fromMap(Map<String, dynamic> json) => Tarjeta(
-        links: List<dynamic>.from(json["links"].map((x) => x)),
+        links: json["links"] == null
+            ? null
+            : List<Link>.from(json["links"].map((x) => Link.fromMap(x))),
         contador: json["contador"],
         copia: json["copia"],
-        updated: DateTime.parse(json["updated"]),
-        created: DateTime.parse(json["created"]),
+        updated:
+            json["updated"] == null ? null : DateTime.parse(json["updated"]),
+        created:
+            json["created"] == null ? null : DateTime.parse(json["created"]),
         id: json["_id"],
         slug: json["slug"],
         name: json["name"],
@@ -240,9 +249,12 @@ class Tarjeta {
         themeicons: json["themeicons"],
         icono: json["icono"],
         partner: json["partner"],
-        style: Style.fromMap(json["style"]),
-        social: List<Social>.from(json["social"].map((x) => Social.fromMap(x))),
+        style: json["style"] == null ? null : Style.fromMap(json["style"]),
+        social: json["social"] == null
+            ? null
+            : List<Social>.from(json["social"].map((x) => Social.fromMap(x))),
         urlmaps: json["urlmaps"],
+        urlMaps: json["urlMaps"],
         bgcolorfoot: json["bgcolorfoot"],
         slogancolor: json["slogancolor"],
         namecolor: json["namecolor"],
@@ -252,11 +264,13 @@ class Tarjeta {
       );
 
   Map<String, dynamic> toMap() => {
-        "links": List<dynamic>.from(links.map((x) => x)),
+        "links": links == null
+            ? null
+            : List<dynamic>.from(links?.map((x) => x.toMap()) ?? []),
         "contador": contador,
         "copia": copia,
-        "updated": updated.toIso8601String(),
-        "created": created.toIso8601String(),
+        "updated": updated?.toIso8601String(),
+        "created": created?.toIso8601String(),
         "_id": id,
         "slug": slug,
         "name": name,
@@ -280,15 +294,75 @@ class Tarjeta {
         "themeicons": themeicons,
         "icono": icono,
         "partner": partner,
-        "style": style.toMap(),
-        "social": List<dynamic>.from(social.map((x) => x.toMap())),
+        "style": style == null ? null : style?.toMap(),
+        "social": social == null
+            ? null
+            : List<dynamic>.from(social?.map((x) => x.toMap()) ?? []),
         "urlmaps": urlmaps,
+        "urlMaps": urlMaps,
         "bgcolorfoot": bgcolorfoot,
         "slogancolor": slogancolor,
         "namecolor": namecolor,
         "titlecolor": titlecolor,
         "labelcolor": labelcolor,
         "mbuttoncolor": mbuttoncolor,
+      };
+}
+
+class Link {
+  Link({
+    this.position,
+    this.place,
+    this.label,
+    this.type,
+    this.url,
+    this.icon,
+  });
+
+  int? position;
+  String? place;
+  String? label;
+  String? type;
+  String? url;
+  String? icon;
+
+  Link copyWith({
+    int? position,
+    String? place,
+    String? label,
+    String? type,
+    String? url,
+    String? icon,
+  }) =>
+      Link(
+        position: position ?? this.position,
+        place: place ?? this.place,
+        label: label ?? this.label,
+        type: type ?? this.type,
+        url: url ?? this.url,
+        icon: icon ?? this.icon,
+      );
+
+  factory Link.fromJson(String str) => Link.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Link.fromMap(Map<String, dynamic> json) => Link(
+        position: json["position"],
+        place: json["place"],
+        label: json["label"],
+        type: json["type"],
+        url: json["url"],
+        icon: json["icon"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "position": position,
+        "place": place,
+        "label": label,
+        "type": type,
+        "url": url,
+        "icon": icon,
       };
 }
 
@@ -299,9 +373,9 @@ class Social {
     required this.url,
   });
 
-  final String name;
-  final String icon;
-  final String url;
+  String name;
+  String icon;
+  String url;
 
   Social copyWith({
     String? name,
@@ -333,20 +407,20 @@ class Social {
 
 class Style {
   Style({
-    required this.themeicons,
-    required this.buttoncolor,
-    required this.logowidth,
-    required this.bgcolor1,
-    required this.bgcolor2,
-    required this.bgcolor,
+    this.themeicons = "",
+    this.buttoncolor = "",
+    this.logowidth = "",
+    this.bgcolor1 = "",
+    this.bgcolor2 = "",
+    this.bgcolor = "",
   });
 
-  final String themeicons;
-  final String buttoncolor;
-  final String logowidth;
-  final String bgcolor1;
-  final String bgcolor2;
-  final String bgcolor;
+  String themeicons;
+  String buttoncolor;
+  String logowidth;
+  String bgcolor1;
+  String bgcolor2;
+  String bgcolor;
 
   Style copyWith({
     String? themeicons,

@@ -37,14 +37,16 @@ class TitleAdd extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 (iconTitle == null) ? Container() : iconTitle!,
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  textTitle ?? "",
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
+                Flexible(
+                  child: Text(
+                    textTitle ?? "",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],
@@ -53,14 +55,16 @@ class TitleAdd extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 (iconSubTitle == null) ? Container() : iconSubTitle!,
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  textSubTitle ?? "",
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
+                Flexible(
+                  child: Text(
+                    textSubTitle ?? "",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],
