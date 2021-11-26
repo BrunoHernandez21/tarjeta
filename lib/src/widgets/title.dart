@@ -6,9 +6,11 @@ class TitleAdd extends StatelessWidget {
   final Widget? iconTitle;
   final Widget? iconSubTitle;
   final VoidCallback? function;
+  final Color? color;
 
   const TitleAdd({
     Key? key,
+    this.color,
     this.textTitle,
     this.textSubTitle,
     this.iconTitle,
@@ -43,8 +45,8 @@ class TitleAdd extends StatelessWidget {
                 Flexible(
                   child: Text(
                     textTitle ?? "",
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: color,
                       fontSize: 16,
                     ),
                   ),
@@ -61,8 +63,8 @@ class TitleAdd extends StatelessWidget {
                 Flexible(
                   child: Text(
                     textSubTitle ?? "",
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: color,
                       fontSize: 16,
                     ),
                   ),

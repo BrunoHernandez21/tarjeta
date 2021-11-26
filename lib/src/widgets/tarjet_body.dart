@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/parser.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:webtarjeta/src/helpers/string_to_color.dart';
 import 'package:webtarjeta/src/models/api.dart';
+
 import 'package:webtarjeta/src/widgets/lessbar.dart';
+import 'package:webtarjeta/src/widgets/svg_image.dart';
 import 'package:webtarjeta/src/widgets/title.dart';
 
 /////tarjeta
@@ -12,7 +16,7 @@ const String tarjetaSlug = 'tarjeta-slug/'; //Database
 const String tarjetaIcon = 'tarjeta-icono/'; //Logo empreza
 const String tarjetaLogo = 'img/tarjeta-logo/'; //Logo empreza
 const String tarjetaAvatar = 'img/tarjeta-avatar/'; //Avatar
-const String tarjetaBoton = 'tarjeta-boton/'; //
+const String tarjetaBoton = 'img/tarjeta-boton/'; //
 const String manifest = 'manifest/';
 
 @immutable
@@ -28,11 +32,9 @@ class TarjetaKey extends StatelessWidget {
       height: 800,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage("fondo2.jpg"),
-            fit: BoxFit.cover,
-          ),
-          //color: Colors.cyan.shade900,
+          color: ((acount.tarjeta?.bgcolor?.length ?? 0) > 2)
+              ? stringToColor(acount.tarjeta!.bgcolor!)
+              : Colors.grey.shade300,
           border: Border.all(
             width: 3,
             color: Colors.black,
@@ -50,11 +52,6 @@ class TarjetaKey extends StatelessWidget {
   Widget listaItem({
     required BuildContext context,
   }) {
-    const snackBar = SnackBar(
-      content: Text('Copiado al portapapeles'),
-      duration: Duration(seconds: 2),
-    );
-
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -64,44 +61,64 @@ class TarjetaKey extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-
           //////////////////Logo
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(40)),
-            clipBehavior: Clip.antiAlias,
-            child: (acount.ok && (acount.tarjeta?.logo?.length ?? 0) > 2)
-                ? Image.network(
-                    base + tarjetaLogo + (acount.tarjeta!.logo ?? ""),
-                    height: 150,
-                    fit: BoxFit.cover,
-                  )
-                : Container(),
-          ),
 
+          (!acount.ok)
+              ? const SizedBox()
+              : SizedBox(
+                  height: 100,
+                  child: FadeInImage(
+                    placeholder: const AssetImage('no-image.jpg'),
+                    image: NetworkImage(
+                      base + tarjetaLogo + (acount.tarjeta!.logo ?? ""),
+                    ),
+                  ),
+                ),
+/*
+FadeInImage(
+                    placeholder: const AssetImage('no-image.jpg'),
+                    image: NetworkImage(
+                      base + tarjetaLogo + (acount.tarjeta!.logo ?? ""),
+                    ),
+                  ),*/
           //////////////////Avatar
           SizedBox(
             width: 300,
             child: Row(
               children: [
-                acount.ok == false
+                !acount.ok
                     ? const Text("  ")
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         clipBehavior: Clip.antiAlias,
-                        child: Image.network(
-                          base + tarjetaAvatar + (acount.tarjeta!.avatar ?? ""),
+                        child: SizedBox(
                           height: 100,
+                          child: FadeInImage(
+                            height: 100,
+                            placeholder: const AssetImage('no-image.jpg'),
+                            image: NetworkImage(
+                              base +
+                                  tarjetaAvatar +
+                                  (acount.tarjeta!.avatar ?? ""),
+                            ),
+                          ),
                         ),
                       ),
                 Flexible(
                   child: ListTile(
                     title: Text(
                       acount.ok == false ? "" : acount.tarjeta!.name ?? "",
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
+                      style: TextStyle(
+                          color: stringToColor(
+                              acount.tarjeta?.titlecolor ?? "#FFFFFF"),
+                          fontSize: 18),
                     ),
                     subtitle: Text(
                       acount.ok == false ? "" : acount.tarjeta!.surname ?? "",
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
+                      style: TextStyle(
+                          color: stringToColor(
+                              acount.tarjeta?.surnamecolor ?? "#FFFFFF"),
+                          fontSize: 18),
                     ),
                   ),
                 ),
@@ -115,15 +132,15 @@ class TarjetaKey extends StatelessWidget {
           ),
           Text(
             acount.ok == false ? "" : acount.tarjeta!.title ?? "",
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: stringToColor((acount.tarjeta?.surnamecolor) ?? "#FFFFFF"),
               fontSize: 16,
             ),
           ),
           Text(
             acount.ok == false ? "" : acount.tarjeta!.slogan ?? "",
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: stringToColor((acount.tarjeta?.slogancolor) ?? "#FFFFFF"),
               fontSize: 16,
             ),
           ),
@@ -132,10 +149,11 @@ class TarjetaKey extends StatelessWidget {
           ),
 
           //////////////////Items
-          listaAdaptable(
-            context: context,
+          SingleChildScrollView(
+            child: listaAdaptable(
+              context: context,
+            ),
           ),
-          //TODO:Inserte las tarjetas aqui o cree su generador
         ],
       ),
     );
@@ -149,6 +167,20 @@ class TarjetaKey extends StatelessWidget {
     List<Widget> widgets = [];
 
     if (acount.ok) {
+      /////////empresa
+      if (((acount.tarjeta?.labelorg?.length ?? 0) > 2) &&
+          ((acount.tarjeta?.org?.length ?? 0) > 2)) {
+        widgets.add(
+          TitleAdd(
+            textTitle: acount.tarjeta!.labelorg!,
+            textSubTitle: acount.tarjeta!.org ?? "",
+            color: stringToColor((acount.tarjeta?.labelcolor) ?? "#FFFFFF"),
+            function: () {
+              launch(acount.tarjeta!.www ?? "");
+            },
+          ),
+        );
+      }
       /////////Telefono
       if ((acount.tarjeta?.tel?.length ?? 0) > 2) {
         widgets.add(
@@ -156,6 +188,7 @@ class TarjetaKey extends StatelessWidget {
             textTitle: "Hablame",
             textSubTitle: acount.tarjeta!.tel,
             iconSubTitle: const Icon(Icons.phone),
+            color: stringToColor((acount.tarjeta?.labelcolor) ?? "#FFFFFF"),
             function: () {
               launch('tel:${acount.tarjeta!.email}');
             },
@@ -169,6 +202,7 @@ class TarjetaKey extends StatelessWidget {
             textTitle: "Whatsapp",
             textSubTitle: acount.tarjeta!.wa,
             iconSubTitle: const FaIcon(FontAwesomeIcons.whatsapp),
+            color: stringToColor((acount.tarjeta?.labelcolor) ?? "#FFFFFF"),
             function: () {
               launch('https://api.whatsapp.com/send/?phone=' +
                   acount.tarjeta!.wa!.replaceAll('+', '') +
@@ -184,6 +218,7 @@ class TarjetaKey extends StatelessWidget {
             textTitle: "Enviame Un Correo",
             textSubTitle: acount.tarjeta!.email,
             iconSubTitle: const Icon(Icons.message),
+            color: stringToColor((acount.tarjeta?.labelcolor) ?? "#FFFFFF"),
             function: () {
               launch('mailto:${acount.tarjeta!.email}');
             },
@@ -196,7 +231,8 @@ class TarjetaKey extends StatelessWidget {
           TitleAdd(
             textTitle: "Dirección",
             textSubTitle: acount.tarjeta!.dir,
-            iconSubTitle: const Icon(Icons.phone),
+            iconSubTitle: const Icon(Icons.location_on),
+            color: stringToColor((acount.tarjeta?.labelcolor) ?? "#FFFFFF"),
             function: () async {
               await launch(
                   (acount.tarjeta!.urlmaps ?? acount.tarjeta!.urlMaps) ??
@@ -205,12 +241,38 @@ class TarjetaKey extends StatelessWidget {
           ),
         );
       }
-      /////////compartir
+      SvgParser();
+      if (acount.tarjeta!.links?.isNotEmpty ?? false) {
+        acount.tarjeta!.links?.forEach((element) {
+          if (element.place == "link") {
+            widgets.add(
+              TitleAdd(
+                color: stringToColor((acount.tarjeta?.labelcolor) ?? "#FFFFFF"),
+                textTitle: element.label,
+                iconTitle: SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: ImageSvgWeb(
+                    url: base + tarjetaBoton + element.icon!,
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+                function: () async {
+                  await launch(element.url ?? "");
+                },
+              ),
+            );
+          }
+        });
+      }
 
+      /////////compartir
       widgets.add(
         TitleAdd(
           textTitle: "Compartir Tarjeta",
           iconTitle: const Icon(Icons.share),
+          color: stringToColor((acount.tarjeta?.labelcolor) ?? "#FFFFFF"),
           function: () {
             Share.share("{'decode':'decode'}", subject: "Compartir");
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -218,6 +280,7 @@ class TarjetaKey extends StatelessWidget {
         ),
       );
     }
+
     widgets.add(const SizedBox(
       height: 80,
     ));
@@ -226,3 +289,5 @@ class TarjetaKey extends StatelessWidget {
     );
   }
 }
+
+class Time {}

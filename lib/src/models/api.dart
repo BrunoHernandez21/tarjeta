@@ -90,6 +90,12 @@ class Tarjeta {
     this.labelcolor,
     this.mbuttoncolor,
     this.urlMaps,
+    this.labelorg,
+    this.color,
+    this.labelbordercolor,
+    this.labeliconcolor,
+    this.marcoavatarcolor,
+    this.surnamecolor,
   });
 
   List<Link>? links;
@@ -102,6 +108,7 @@ class Tarjeta {
   List<Social>? social;
   int? v;
   String? bgcolor;
+  String? labelorg;
   String? logowidth;
   String? themeicons;
   String? icono;
@@ -113,6 +120,11 @@ class Tarjeta {
   String? titlecolor;
   String? labelcolor;
   String? mbuttoncolor;
+  String? surnamecolor;
+  String? labelbordercolor;
+  String? marcoavatarcolor;
+  String? labeliconcolor;
+  String? color;
   String? id;
   String? slug;
   String? name;
@@ -138,6 +150,7 @@ class Tarjeta {
     DateTime? updated,
     DateTime? created,
     String? id,
+    String? labelorg,
     String? slug,
     String? name,
     String? surname,
@@ -162,14 +175,19 @@ class Tarjeta {
     dynamic partner,
     Style? style,
     List<Social>? social,
+    String? urlMaps,
     String? urlmaps,
     String? bgcolorfoot,
     String? slogancolor,
     String? namecolor,
     String? titlecolor,
+    String? surnamecolor,
     String? labelcolor,
     String? mbuttoncolor,
-    String? urlMaps,
+    String? labelbordercolor,
+    String? marcoavatarcolor,
+    String? labeliconcolor,
+    String? color,
   }) =>
       Tarjeta(
         links: links ?? this.links,
@@ -178,6 +196,7 @@ class Tarjeta {
         updated: updated ?? this.updated,
         created: created ?? this.created,
         id: id ?? this.id,
+        labelorg: labelorg ?? this.labelorg,
         slug: slug ?? this.slug,
         name: name ?? this.name,
         surname: surname ?? this.surname,
@@ -210,6 +229,11 @@ class Tarjeta {
         titlecolor: titlecolor ?? this.titlecolor,
         labelcolor: labelcolor ?? this.labelcolor,
         mbuttoncolor: mbuttoncolor ?? this.mbuttoncolor,
+        color: color ?? this.color,
+        labelbordercolor: labelbordercolor ?? this.labelbordercolor,
+        labeliconcolor: labeliconcolor ?? this.labeliconcolor,
+        marcoavatarcolor: marcoavatarcolor ?? this.marcoavatarcolor,
+        surnamecolor: surnamecolor ?? this.surnamecolor,
       );
 
   factory Tarjeta.fromJson(String str) => Tarjeta.fromMap(json.decode(str));
@@ -232,6 +256,7 @@ class Tarjeta {
         surname: json["surname"],
         title: json["title"],
         org: json["org"],
+        labelorg: json["labelorg"],
         www: json["www"],
         email: json["email"],
         avatar: json["avatar"],
@@ -261,6 +286,11 @@ class Tarjeta {
         titlecolor: json["titlecolor"],
         labelcolor: json["labelcolor"],
         mbuttoncolor: json["mbuttoncolor"],
+        color: json["color"],
+        labelbordercolor: json["labelbordercolor"],
+        labeliconcolor: json["labeliconcolor"],
+        marcoavatarcolor: json["marcoavatarcolor"],
+        surnamecolor: json["surnamecolor"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -276,6 +306,7 @@ class Tarjeta {
         "name": name,
         "surname": surname,
         "title": title,
+        "labelorg": labelorg,
         "org": org,
         "www": www,
         "email": email,
@@ -306,6 +337,11 @@ class Tarjeta {
         "titlecolor": titlecolor,
         "labelcolor": labelcolor,
         "mbuttoncolor": mbuttoncolor,
+        'color': color,
+        'labelbordercolor': labelbordercolor,
+        'labeliconcolor': labeliconcolor,
+        'marcoavatarcolor': marcoavatarcolor,
+        'surnamecolor': surnamecolor,
       };
 }
 
