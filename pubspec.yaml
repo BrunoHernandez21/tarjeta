@@ -16,6 +16,8 @@ dependencies:
   flutter_bloc: ^8.0.0
   http: ^0.13.4
   share_plus: ^3.0.4
+  flutter_svg: ^0.23.0+1
+  flutter_hooks: ^0.18.1
 
 
 dev_dependencies:

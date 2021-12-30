@@ -23,7 +23,7 @@ class IconButtonEx extends StatelessWidget {
       child: IconButton(
         icon: icon,
         onPressed: onPressed,
-        iconSize: size ?? 24.0,
+        iconSize: size ?? 28.0,
       ),
     );
   }

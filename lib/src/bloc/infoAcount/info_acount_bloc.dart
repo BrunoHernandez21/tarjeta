@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:webtarjeta/src/models/api.dart';
@@ -17,7 +15,10 @@ class InfoAcountBloc extends Bloc<InfoAcountEvent, InfoAcountState> {
     try {
       final Acount acount = Acount.fromJson(info);
       add(OnLoadAcont(acount));
-    } catch (e) {}
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
   }
 
   InfoAcountBloc() : super(InfoAcountState(acount: Acount(ok: false))) {

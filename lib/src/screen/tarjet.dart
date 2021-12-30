@@ -13,16 +13,18 @@ class Tarjet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<InfoAcountBloc>(context)
+        .loadAcount(base + tarjetaSlug + username);
     return Scaffold(
       backgroundColor: Colors.indigo.shade200,
       body: BlocBuilder<InfoAcountBloc, InfoAcountState>(
         builder: (context, state) {
-          if (state.acount.ok == false) {
-            BlocProvider.of<InfoAcountBloc>(context)
-                .loadAcount(base + tarjetaSlug + username);
-          }
-          return Center(
-            child: TarjetaKey(acount: state.acount),
+          return SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: Center(
+              child: TarjetaKey(acount: state.acount),
+            ),
           );
         },
       ),
